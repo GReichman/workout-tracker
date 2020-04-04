@@ -1,22 +1,27 @@
 async function initWorkout() {
   const lastWorkout = await API.getLastWorkout();
-  console.log("Last workout:", lastWorkout);
   if (lastWorkout) {
     document
       .querySelector("a[href='/exercise?']")
       .setAttribute("href", `/exercise?id=${lastWorkout._id}`);
-
     const workoutSummary = {
       date: formatDate(lastWorkout.day),
-      totalDuration: lastWorkout.totalDuration,
       numExercises: lastWorkout.exercises.length,
+      totalDuration : getTime(lastWorkout.exercises),
       ...tallyExercises(lastWorkout.exercises)
     };
-    console.log(lastWorkout.numExercises);
     renderWorkoutSummary(workoutSummary);
   } else {
     renderNoWorkoutText()
   }
+}
+
+function getTime(workout){
+  let sum = 0;
+  for(let i=0; i<workout.length; i++){
+      sum += workout[i].duration;
+  }
+  return sum;
 }
 
 function tallyExercises(exercises) {

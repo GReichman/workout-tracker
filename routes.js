@@ -20,8 +20,9 @@ router.get("/api/workouts", function (req, res) {
 });
 
 router.post("/api/workouts", function (req, res) {
+    console.log(req.body);
   db.Workout.create(req.body).then(results => {
-    console.log(results);
+      res.json(results);
   });
 });
 
@@ -31,9 +32,14 @@ router.put("/api/workouts/:id", function(req, res) {
         if(err){
             res.send(err);
         }
-        console.log(results);
         res.json(results);
     });
+});
+
+router.get("/api/workouts/range", function(req,res){
+    db.Workout.find({}).then(results =>{
+        res.json(results);
+    })
 });
 
 module.exports = router;

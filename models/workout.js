@@ -34,33 +34,22 @@ const workoutSchema = new Schema({
         distance: {
             type: Number
         }
-    }],
-    numExercises: {
-        type: Number,
-        default: 0
-    },
-    totalDuration : {
-        type:Number,
-        default: 0
-    }
+    }]
 });
 
-// workoutSchema.methods.totalDuration = function() {
-//     let sum = 0;
-//     this.exercises.forEach(element => {
-//         sum += element.duration
-//     });
-//     return sum;
-// };
+workoutSchema.methods.totalDuration = function(cb) {
+    let sum = 0;
+    for(let i=0; i<this.exercises.length; i++){
+        sum += this.exercises[i].duration;
+    }
+    cb(sum);
+};
 
-// workoutSchema.methods.numExercises = function() {
-//     console.log("test");
-//     return this.exercises.length;
-// };
+workoutSchema.methods.numExercises = function() {
+    return this.exercises.length;
+};
 
-workoutSchema.pre("save", function(){
-    this.numExercises = this.exercises.length;
-})
+
 
 const Transaction = mongoose.model("Workout",workoutSchema);
 
